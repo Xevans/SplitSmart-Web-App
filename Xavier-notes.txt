@@ -1,0 +1,143 @@
+run virtual environment: .venv\Scripts\Activate.ps1
+super user creds: admin admin
+additional users: xevans, D******13#; ace_blue01, Sy*****13#
+
+setting up venv:
+1. in powershell run 'python -m venv .venv'
+2. run .venv\Scripts\Activate.ps1
+2.5 if you get a script running denial/error run this line: 'Set-ExecutionPolicy -Scope CurrentUser Unrestricted' then try step 2 again
+3. when in venv, pip install python, black, and django
+    3.1 python -m pip install black
+    3.2 python -m pip install django
+    3.2 python -m pip install pillow
+
+Commands:
+- Run server: python manage.py runserver
+- Create a new app: 'python manage.py startapp appName'
+
+Thoughts...
+User account system. Will need a user model and a profile model that imports user
+Profile model will hold process related info
+ 
+Xavier's Branch test
+
+
+July 21
+
+The custom user tutorial is an alternative way to handle logins and logouts. We will want to replace the old login system with the custom one.
+We can then assign more fields to a user like email, DOB, username, password, etc. Do not run server or migrate or existing auth stuff will clash.
+
+--
+
+New login system tested and working with a super user, and an account form myself.
+The next step is to delete the database and create more feilds to ubtain from the user at sign up.
+
+-- left off figuring out how to make a edit profile page. Watch: https://www.youtube.com/watch?v=F5kTZdi_c5k
+
+
+July 27
+
+New authentication system is now running. The purpose of this new system is to allow the user model built into dango's authentication package to be
+extended to a costom model called Profile. That will hold user attributes.
+
+Possibility:
+Adding a user balance: would need to create another extension of the default user profile and
+prep attributes such as balance, dues, etc.
+User entered info would contain, Bank, acc no., route no., cards
+
+Simplified route due to time constraints:
+Add attributes (balances, dues) to existing profile model.
+
+Group model:
+will be a many to many association. (So many user ID's to many groups).
+
+July 29
+
+(Skipping for now) Next goal is to create a Friending system so that any two users can add each other as friends.
+Ideally this would involve doing a lookup for the person's user name and sending that ID a request
+When the reciever acknowledges that request (accepts) the sender's model is now associated 
+with the reciever's ID.
+
+The friending step will be skipped for the time being to save time. 
+Instead, the next goal for the prototype is to send money from one user to another
+This would ideally require a form-POST-request that contains the amount and the username of the reciever.
+
+July 30
+
+Notification system:
+send request for payment to recipient....
+during POST create a request instance (based on a model), associated with the provided username
+when the recipient goes to notifications page...
+GET request
+for each notification, display request
+payment requests contain...
+sender username, amount, recipient name
+
+
+August 2
+
+Class project submitted as only required functionality was needed.
+Continuing this project to learn more out of back and front end development.
+
+Todays task is to implement a friendList and friend request system that allows a user to send a friend request by entering their name into a form.
+When the other user visits their home page, thay will see a notification in their friend notification bar.
+The user can either accept or reject the request. The sender will not be notified on the status of their request unless it is accepted where the reciepient will now
+appear in their friend list and vice versa.
+
+Make a form to send friend requests.(X)
+Add HTML for friend bar()
+
+Additional functionality that could be built on this would be the ability to quick send requests or money.
+This would be through a drop down on the send money page or by opening the friend bar and clicking their name to recieve options.
+
+August 4
+
+Friend requests show up on home page of recipient.
+The friend request objects are maintained within a global table called FriendRequests.
+
+Next goal is to add functionality to accept the friend requests.
+    On home: When user clicks on that particular request.
+    opens a modal that asks if the user wishes to accept or reject the user.
+    if accept, create new object for friend list table
+        delete friend request table entry
+    if reject, delete friend request table entry
+    Consider... what if friend req already sent?
+    check table before creating object. If it exists...
+    notify the user
+
+In order to store primary key of sender in friendList will have to store sender pk in friend request.
+
+
+
+August 5 button wont POST
+
+
+August 6
+Friends page now shows Friends.
+Next goal is to handle friend request object after recipient interatcs with it.
+
+when user visits home page, check the request status. If it is set to accept, dont show it.
+when the sender loads their home page and the request is accepted status AND they are the sender. Add the friend for the sender and delete the request obj
+make send_friend_request page a link on the friends page.
+re-write friend page to show friend. if no friend to show say "no friends"
+
+August 7
+Friend system implemented.
+
+More functionality is planned, but next I wish to style all of the pages to give an
+identity that is consistent and clean.
+
+Front end Tasks:
+
+- Send success alert on form completion (basically do not redirect. Show message. use JS to control timing)
+
+- notifications are currently categorized followed by their cards. This is good.
+    Now I just want to move it to an off canvas bar that is called with a notifications
+    button with a badge to indicated how many new notifications there are. Will require one to one model called...
+    system (to be more general) or notifications (to be more specific).
+
+- Each category on the side bar will be clickable that will take the user to a new page
+    For friends it will be the friends list. Where there will be a centered list of friends with a wheel like scroll
+    like in a game show where the biggest card/bubble is at the center and they get smaller and fade toward the ends.
+    For transactions. They will lead to transaction history showing a similar wheel however
+    the outgoing will be to the right and incoming going to the left with + and -.
