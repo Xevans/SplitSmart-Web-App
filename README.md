@@ -6,10 +6,13 @@
  Accumulated from an older class project where I made several contributions beyond the scope of the project and its timeline for learning purposes. 
  Not planning to continue to add features to the project, but wrather reference and improve upon previous methods and approaches.
 
- Current Features
- User registration, authentication, profile management
- balance management
- send/request money
- notification stack
- bill splitting
- balance tracking
+ ## Current Features ##
+ * User registration
+  * Authentication
+  * Profile management
+ * balance management
+  * balance tracking
+ * send/request money
+ * notification stack
+ * bill splitting
+ 
